@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Catalog Lumanari</title>
+</head>
+<body>
+<h1>Figurinele Noastre</h1>
+<hr>
+
+<ul>
+    {% for item in wax_figures %}
+    <li>
+        <h2>{{item.name}} - {{item.price}} RON </h2>
+        <p>Detalii: {{item.description}} </p>
+    </li>
+    {% endfor %}
+</ul>
+
+<a href="/"> Inapoi la pagina principala (Back to Home) </a>
+
+</body>
+</html>
