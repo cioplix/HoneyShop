@@ -1,23 +1,17 @@
-<!DOCTYPE html>
-<html lang="ro">
-<head>
-    <meta charset="UTF-8">
-    <title>Catalog Miere</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block content %}
 <h1>Mierea Noastra</h1>
 <hr>
 
 <ul>
     {% for item in honey_products %}
     <li>
+         <img src="{{url_for('static', filename='images/'+item.image)}}" alt="{{item.name}}" width="200">
         <h2>{{item.name}} - {{item.price}} RON </h2>
         <p>Detalii: {{item.description}} </p>
     </li>
     {% endfor %}
 </ul>
 
-<a href="/"> Inapoi la pagina principala (Back to Home) </a>
-
-</body>
-</html>
+{% endblock %}
