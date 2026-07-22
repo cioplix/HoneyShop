@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Magazinul de Miere</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<nav>
+    <a href="/">Acasa (Home)</a>
+    <a href="/honey">Catalog Miere</a>
+    <a href="/wax">Catalog Figurine</a>
+
+</nav>
+<div class="content-container">
+{% block content %}
+{% endblock %}
+    </div>
+</body>
+</html>

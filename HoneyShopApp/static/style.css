@@ -1,0 +1,55 @@
+/* PT Background si culoare la text */
+body {
+    font-family: 'Segoe UI',Tahoma, Geneva,Verdana, sans-serif;
+    background-color: #fdfbf7;
+    color: #3e2723;
+    margin: 0;
+    padding: 0;
+}
+
+nav{
+    background-color: #ffca28;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+nav a{
+    color: #3e2723;
+    text-decoration: none;
+    text-weight: bold;
+    font-size: 18px;
+    margin: 0 20px;
+    padding: 5px 10px;
+    border-radius: 4px;
+
+}
+nav a:hover{
+    background-color: #ffb300;
+    color:white;
+}
+/*container pt text*/
+.content-container{
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+/*facem product cards*/
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li{
+    background-color: #fff8e1;
+    margin-bottom:20px;
+    padding: 20px;
+    border-left: 6px solid #ffb300;
+    border-radius: 4px;
+}
+
+h1,h2{
+    color: #d84315;
+}
