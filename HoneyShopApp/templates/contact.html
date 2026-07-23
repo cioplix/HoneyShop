@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Contacteaza-ne(Contact Us)</h1>
+<p>Ai o intrebare despre miere sau figurine? Scrie-ne mai jos!</p>
+<form method="POST" action="/contact">
+    <label for="name">Nume: </label> <br>
+    <input type="text" id="name" name="name" required> <br><br>
+    <label for="message">Mesajul tau:</label><br>
+    <textarea id="message" name="message" rows="4" required></textarea> <br><br>
+    <button type="submit">Trimite</button>
+
+</form>
+{% endblock %}

@@ -8,7 +8,9 @@
     {% for item in honey_products %}
     <li>
          <img src="{{url_for('static', filename='images/'+item.image)}}" alt="{{item.name}}" width="200">
-        <h2>{{item.name}} - {{item.price}} RON </h2>
+       <h2>
+    <a href="/honey/{{ item.name }}">{{ item.name }}</a> - {{ item.price }} RON
+       </h2>
         <p>Detalii: {{item.description}} </p>
     </li>
     {% endfor %}
