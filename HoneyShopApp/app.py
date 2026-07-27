@@ -1,8 +1,12 @@
 from flask import Flask, render_template, request,flash,redirect,url_for
 import sqlite3
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def get_db_connection():
-    conn = sqlite3.connect('database.db')
+    db_path = os.path.join(BASE_DIR, 'database.db')
+    conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
 app = Flask(__name__)
@@ -36,7 +40,8 @@ def contact():
             flash("Eroare! Te rugam sa completezi toate campurile.","error")
             return redirect(url_for('contact'))
        #salvam in text file pana cream database
-        with open("messages.txt","a", encoding="utf-8") as file:
+        msg_path = os.path.join(BASE_DIR, 'messages.txt')
+        with open(msg_path,"a", encoding="utf-8") as file:
             file.write(f"{user_name}: {user_message}\n")
             file.write("-"*30+"\n")
 
