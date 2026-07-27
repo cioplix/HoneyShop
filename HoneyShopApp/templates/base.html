@@ -13,9 +13,35 @@
     <a href="/contact">Contact</a>
 
 </nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-container">
+      {% for category, message in messages %}
+        <p class="flash-message {{category}}">{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
 <div class="content-container">
 {% block content %}
 {% endblock %}
     </div>
+
+<script>
+    const flashMessages = document.querySelectorAll('.flash-message');
+
+    setTimeout(function() {
+        flashMessages.forEach(function(msg) {
+            msg.classList.add('fade-out');
+
+            setTimeout(function() {
+                msg.remove();
+            }, 1000);
+        });
+    }, 3000);
+</script>
+
 </body>
 </html>
