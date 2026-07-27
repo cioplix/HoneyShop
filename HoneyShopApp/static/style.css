@@ -53,3 +53,31 @@ li{
 h1,h2{
     color: #d84315;
 }
+
+.flash-message {
+
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin: 20px auto;
+    max-width: 800px;
+    border-radius: 8px;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    opacity: 1;
+    transition: opacity 1s ease-out;
+}
+.flash-message.success{
+    background-color: #4CAF50;
+}
+.flash-message.error{
+    background-color: #F44336;
+}
+.flash-message.warning{
+    background-color: #FF9800;
+}
+
+
+.fade-out {
+    opacity: 0;
+}

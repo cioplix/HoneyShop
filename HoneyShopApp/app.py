@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request,flash,redirect,url_for
 import sqlite3
 
 def get_db_connection():
@@ -7,6 +7,7 @@ def get_db_connection():
     return conn
 app = Flask(__name__)
 
+app.secret_key = "secret_honey_key"
 @app.route('/')
 
 def home():
@@ -16,12 +17,14 @@ def home():
 def honey():
     conn = get_db_connection()
     honey_from_db = conn.execute("SELECT * FROM products WHERE category = 'honey'").fetchall()
+    conn.close()
     return render_template('honey.html', honey_products=honey_from_db)
 
 @app.route('/wax')
 def wax():
     conn = get_db_connection()
     wax_from_db = conn.execute("SELECT * FROM products WHERE category = 'wax'").fetchall()
+    conn.close()
     return render_template('wax.html', wax_figures=wax_from_db)
 
 @app.route('/contact', methods=['GET', 'POST'])
@@ -29,12 +32,16 @@ def contact():
     if request.method == 'POST':
         user_name = request.form.get('name')
         user_message = request.form.get('message')
-       #salvam in text file pana creem database
+        if not user_name or not user_message:
+            flash("Eroare! Te rugam sa completezi toate campurile.","error")
+            return redirect(url_for('contact'))
+       #salvam in text file pana cream database
         with open("messages.txt","a", encoding="utf-8") as file:
             file.write(f"{user_name}: {user_message}\n")
             file.write("-"*30+"\n")
 
-        return render_template('success.html', user_name=user_name)
+        flash(f"Multumim, {user_name}! Mesajul a fost trimis cu succes.","success")
+        return redirect(url_for('home'))
     return render_template('contact.html')
 
 
