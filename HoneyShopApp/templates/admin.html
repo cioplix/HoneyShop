@@ -1,0 +1,44 @@
+{%extends 'base.html' %}
+{% block content %}
+<h1> Admin Dashboard</h1>
+<hr>
+<h2>Inventar Curent</h2>
+
+<ul>
+    {% for item in products %}
+    <li>
+        <strong>{{item.name}} </strong> - {{ item.price }} RON ({{item.category}})
+<a href="/admin/edit/{{ item.id }}" style="text-decoration:none;background-color:#ff9800;color:white;padding: 5px 10px; border-radius:4px;margin-right: 10px; ">
+    Editeaza
+</a>
+        <form action="/admin/delete/{{item.id}}" method="POST" style="display:inline">
+            <button type="submit" style="color:white;background-color:red;border: none;padding: 5px 10px;border-radius:4px;cursor:pointer;">
+               Sterge
+            </button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+
+<hr>
+<h2>Adauga Produs Nou</h2>
+<form method="POST" action="/admin">
+  <label>Nume Produs:</label><br>
+    <input type="text" name="name" required><br><br>
+  <label>Pret(RON):</label><br>
+    <input type="number" name="price" required> <br><br>
+  <label>Descriere Scurta:</label><br>
+    <input type="text" name="description"> <br><br>
+  <label>Nume Imagine (ex:honey_jar.jpg):</label><br>
+    <input type="text" name="image"> <br><br>
+
+  <label>Categorie:</label><br>
+        <select name="category">
+            <option value="honey">Miere (Honey)</option>
+            <option value="wax">Figurină (Wax)</option>
+        </select><br><br>
+
+        <button type="submit">Adaugă Produs</button>
+    </form>
+
+{% endblock %}

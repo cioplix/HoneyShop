@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Editează Produsul (Edit Product)</h1>
+    <hr>
+
+    <!-- Notice we are injecting the existing product values into the "value" attribute! -->
+    <form method="POST" action="/admin/edit/{{ product.id }}">
+        <label>Nume Produs:</label><br>
+        <input type="text" name="name" value="{{ product.name }}" required><br><br>
+
+        <label>Preț (RON):</label><br>
+        <input type="number" name="price" value="{{ product.price }}" required><br><br>
+
+        <label>Descriere scurtă:</label><br>
+        <input type="text" name="description" value="{{ product.description }}"><br><br>
+
+        <label>Nume Imagine (ex: honey_jar.jpg):</label><br>
+        <input type="text" name="image" value="{{ product.image }}"><br><br>
+
+        <label>Categorie:</label><br>
+        <select name="category">
+            <option value="honey" {% if product.category=='honey' %}selected{% endif %}>
+            Miere (Honey)
+            </option>
+            <option value="wax" {% if product.category=='wax' %}selected{% endif %}>Figurină (Wax)</option>
+        </select><br><br>
+
+        <button type="submit">Salvează Modificările (Save Changes)</button>
+        <br><br>
+        <a href="/admin">Anulează (Cancel)</a>
+    </form>
+{% endblock %}
