@@ -1,6 +1,6 @@
 import os
 import sqlite3
-from flask import Blueprint, Flask, render_template, request,flash ,redirect, url_for
+from flask import Blueprint, Flask, render_template, request,flash ,redirect, url_for,session
 
 public_bp = Blueprint('public', __name__)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -73,4 +73,56 @@ def contact():
         return redirect(url_for('home'))
     return render_template('contact.html')
 
+
+@public_bp.route('/add_to_cart/<int:product_id>', methods=['POST'])
+def add_to_cart(product_id):
+    # 1. Grab the current cart (or an empty list if it's their first click)
+    current_cart = session.get('cart', [])
+
+    # 2. Force a BRAND NEW list by adding the old list and the new item together
+    # This completely bypasses the memory bug!
+    session['cart'] = current_cart + [product_id]
+
+    flash("Produs adăugat în coș!", "success")
+    return redirect(request.referrer)
+
+@public_bp.route('/cart/')
+def view_cart():
+    cart_ids = session.get('cart',[])
+
+    conn = get_db_connection()
+    cart_items = []
+
+    for product_id in cart_ids:
+        item = conn.execute("SELECT * FROM products WHERE id = ?",(product_id,)).fetchone()
+        if item :
+            cart_items.append(item)
+    conn.close()
+
+    grand_total = 0
+
+    for item in cart_items:
+        grand_total += item['price']
+
+    if grand_total > 200:
+        grand_total -= grand_total * (10/100)
+
+
+    return render_template('cart.html', items = cart_items, total=grand_total)
+
+
+@public_bp.route('/remove_from_cart/<int:product_id>', methods=['POST'])
+def remove_from_cart(product_id):
+    current_cart = session.get('cart', [])
+
+    if product_id in current_cart:
+        # Remove the item from the temporary list
+        current_cart.remove(product_id)
+
+        # Wrap it in list() to force a brand new memory object!
+        session['cart'] = list(current_cart)
+
+        flash("Produs eliminat din coș!", "success")
+
+    return redirect(url_for('public.view_cart'))
 

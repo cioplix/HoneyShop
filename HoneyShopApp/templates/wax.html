@@ -11,6 +11,11 @@
         <h2>
     <a href="/wax/{{ item.name }}">{{ item.name }}</a> - {{ item.price }} RON
        </h2>
+        <form action="/add_to_cart/{{ item.id }}" method="POST" style="margin-top: 10px;">
+        <button type="submit" style="background-color: #fbc02d; color: black; border: none; padding: 8px 15px; border-radius: 4px; font-weight: bold; cursor: pointer;">
+            Adaugă în Coș
+        </button>
+        </form>
         <p>Detalii: {{item.description}} </p>
     </li>
     {% endfor %}
