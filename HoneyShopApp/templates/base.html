@@ -6,15 +6,20 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-<nav>
-    <a href="/">Acasa (Home)</a>
-    <a href="/honey">Catalog Miere</a>
-    <a href="/wax">Catalog Figurine</a>
-    <a href="/contact">Contact</a>
+<nav style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background-color: #fbc02d;">
+    <div>
+        <a href="/" style="margin-right: 15px; text-decoration: none; color: #3e2723; font-weight: bold;">Acasă</a>
+        <a href="/honey" style="margin-right: 15px; text-decoration: none; color: #3e2723; font-weight: bold;">Miere</a>
+        <a href="/wax" style="margin-right: 15px; text-decoration: none; color: #3e2723; font-weight: bold;">Figurine</a>
+        <a href="/contact" style="margin-right: 15px; text-decoration: none; color: #3e2723; font-weight: bold;">Contact</a>
+    </div>
 
+    <div>
+        <a href="/cart" class="cart-btn">Coș</a>
+    </div>
 </nav>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
+{% with messages = get_flashed_messages(with_categories=true) %}x
   {% if messages %}
     <div class="flash-container">
       {% for category, message in messages %}
