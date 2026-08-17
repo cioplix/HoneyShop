@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Finalizare Comandă</h1>
+    <hr>
+    
+    <p>Te rugăm să completezi datele de livrare pentru a finaliza comanda.</p>
+    
+    <form action="/checkout" method="POST" style="max-width: 500px; display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+        
+        <label for="name" style="font-weight: bold;">Nume Complet:</label>
+        <input type="text" id="name" name="name" required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+        
+        <label for="phone" style="font-weight: bold;">Telefon:</label>
+        <input type="tel" id="phone" name="phone" required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+        
+        <label for="delivery" style="font-weight: bold;">Metodă de Livrare:</label>
+        <select id="delivery" name="delivery" required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+            <option value="Curier">Curier (Livrări Standard)</option>
+            <option value="Easybox">Easybox (Sameday)</option>
+        </select>
+        
+        <label for="address" style="font-weight: bold;">Adresă Completă / Locație Easybox:</label>
+        <textarea id="address" name="address" rows="4" required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
+        
+        <button type="submit" style="background-color: #ff9800; color: white; padding: 12px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px;">
+            Trimite Comanda
+        </button>
+        
+    </form>
+{% endblock %}

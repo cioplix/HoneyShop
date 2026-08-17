@@ -12,6 +12,11 @@
         <a href="/honey" style="margin-right: 15px; text-decoration: none; color: #3e2723; font-weight: bold;">Miere</a>
         <a href="/wax" style="margin-right: 15px; text-decoration: none; color: #3e2723; font-weight: bold;">Figurine</a>
         <a href="/contact" style="margin-right: 15px; text-decoration: none; color: #3e2723; font-weight: bold;">Contact</a>
+
+        {% if session.get('admin_logged_in') %}
+            <a href = "/admin" style="margin-left: 20px; text-decoration: none; color: white;background-color: #d32f2f;padding:5px 10px;border-radius:4px; font-weight: bold;">Admin Dashboard</a>
+            <a href="/logout" style="margin-left: 10px; text-decoration: none; color: #d32f2f; font-weight: bold;">Logout</a>
+        {% endif %}
     </div>
 
     <div>
@@ -19,7 +24,7 @@
     </div>
 </nav>
 
-{% with messages = get_flashed_messages(with_categories=true) %}x
+{% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     <div class="flash-container">
       {% for category, message in messages %}

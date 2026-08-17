@@ -1,6 +1,6 @@
 import os
 import sqlite3
-from flask import  Blueprint,Flask, render_template, request,flash, redirect, url_for
+from flask import Blueprint, Flask, render_template, request, flash, redirect, url_for, session
 
 admin_bp = Blueprint('admin', __name__)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -13,6 +13,11 @@ def get_db_connection():
 
 @admin_bp.route('/admin', methods=['GET', 'POST'])
 def admin():
+    admin_login=session.get('admin_logged_in')
+    if not admin_login:
+        flash("Acces interzis!","error")
+        return redirect(url_for('public.login'))
+
     conn = get_db_connection()
 
     if request.method == 'POST':
@@ -29,7 +34,7 @@ def admin():
         conn.commit()
         conn.close()
         flash(f"Produsul {new_name} a fost adaugat!", "success")
-        return redirect(url_for('admin'))
+        return redirect(url_for('admin.admin'))
 
     all_products = conn.execute('SELECT * FROM products').fetchall()
     conn.close()
@@ -43,7 +48,7 @@ def delete_product(product_id):
     conn.commit()
     conn.close()
     flash(f"Produsul a fost sters din baza de date!", "error")
-    return redirect(url_for('admin'))
+    return redirect(url_for('admin.admin'))
 
 
 @admin_bp.route('/admin/edit/<int:product_id>', methods=['GET', 'POST'])
@@ -71,9 +76,10 @@ def edit_product(product_id):
         conn.close()
 
         flash("Produsul a fost actualizat cu succes!", "success")
-        return redirect(url_for('admin'))
+        return redirect(url_for('admin.admin'))
 
     product_to_edit = conn.execute('SELECT * FROM products WHERE id = ?', (product_id,)).fetchone()
     conn.close()
 
     return render_template('edit.html', product=product_to_edit)
+
