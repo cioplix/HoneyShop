@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto; background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    
+    <h1 style="color: #4CAF50; text-align: center;">Comandă Confirmată!</h1>
+    <p style="text-align: center; color: #555;">Îți mulțumim pentru comandă, <strong>{{ order.customer_name }}</strong>. Mai jos ai detaliile facturii tale.</p>
+    
+    <hr style="border: 1px solid #eee; margin: 20px 0;">
+    
+    <h3 style="margin-bottom: 10px;">Număr Comandă: #000{{ order.id }}</h3>
+    
+    <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+        <p><strong>Telefon:</strong> {{ order.phone }}</p>
+        <p><strong>Metodă Livrare:</strong> {{ order.delivery_method }}</p>
+        <p><strong>Adresă / Locație:</strong> {{ order.address }}</p>
+    </div>
+    
+    <h3>Produse Comandate:</h3>
+    <!-- The 'white-space: pre-wrap' CSS tells HTML to respect our \n line breaks! -->
+    <p style="white-space: pre-wrap; background-color: #fef8e1; padding: 15px; border-radius: 5px;">{{ order.order_summary }}</p>
+    
+    <h2 style="text-align: right; color: #d32f2f;">Total Achitat: {{ order.total_price }} RON</h2>
+    
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="/" style="background-color: #ff9800; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Înapoi la Magazin</a>
+    </div>
+
+</div>
+{% endblock %}
