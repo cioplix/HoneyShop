@@ -11,11 +11,12 @@
        <h2>
     <a href="/honey/{{ item.name }}">{{ item.name }}</a> - {{ item.price }} RON
        </h2>
-      <form action="/add_to_cart/{{ item.id }}" method="POST" style="margin-top: 10px;">
-        <button type="submit" style="background-color: #fbc02d; color: black; border: none; padding: 8px 15px; border-radius: 4px; font-weight: bold; cursor: pointer;">
-            Adaugă în Coș
-        </button>
-    </form>
+     <form action="/add_to_cart/{{ item.id }}" method="POST" style="margin-top: 10px; display: flex; align-items: center; gap: 10px;">
+    <input type="number" name="quantity" min="1" value="1" style="width: 50px; padding: 7px; border: 1px solid #ccc; border-radius: 4px;">
+    <button type="submit" style="background-color: #fbc02d; color: black; border: none; padding: 8px 15px; border-radius: 4px; font-weight: bold; cursor: pointer;">
+        Adaugă în Coș
+    </button>
+</form>
         <p>Detalii: {{item.description}} </p>
     </li>
     {% endfor %}

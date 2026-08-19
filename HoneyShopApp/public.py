@@ -1,9 +1,8 @@
 import os
 import sqlite3
-from asyncio.windows_events import NULL
 
 from flask import Blueprint, Flask, render_template, request,flash ,redirect, url_for,session
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash,generate_password_hash
 public_bp = Blueprint('public', __name__)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -80,12 +79,16 @@ def contact():
 def add_to_cart(product_id):
     # 1. Grab the current cart (or an empty list if it's their first click)
     current_cart = session.get('cart', [])
+    quantity = request.form.get('quantity')
+    quantity = int(quantity)
 
     # 2. Force a BRAND NEW list by adding the old list and the new item together
     # This completely bypasses the memory bug!
-    session['cart'] = current_cart + [product_id]
+    for i in range(quantity):
+        current_cart += [product_id]
+    session['cart'] = current_cart
 
-    flash("Produs adăugat în coș!", "success")
+    flash("Produs(e) adăugat în coș!", "success")
     return redirect(request.referrer or url_for('public.home'))
 
 @public_bp.route('/cart/')
@@ -95,16 +98,18 @@ def view_cart():
     conn = get_db_connection()
     cart_items = []
 
-    for product_id in cart_ids:
+    unique_ids = set(cart_ids)
+    for product_id in unique_ids:
         item = conn.execute("SELECT * FROM products WHERE id = ?",(product_id,)).fetchone()
+        quantity =cart_ids.count(product_id) # sau item['quantity'] ?
         if item :
-            cart_items.append(item)
+            cart_items.append({'product': item,'quantity': quantity})
     conn.close()
 
     grand_total = 0
 
     for item in cart_items:
-        grand_total += item['price']
+        grand_total += item['product']['price'] * item['quantity']
 
     if grand_total > 200:
         grand_total -= grand_total * (10/100)
@@ -115,17 +120,15 @@ def view_cart():
 
 @public_bp.route('/remove_from_cart/<int:product_id>', methods=['POST'])
 def remove_from_cart(product_id):
+    # 1. Fetch the current cart
     current_cart = session.get('cart', [])
 
-    if product_id in current_cart:
-        # Remove the item from the temporary list
-        current_cart.remove(product_id)
+    # 2. THE SHREDDER: List Comprehension
+    # Keep the item ONLY if its ID does not match the one we want to delete
+    session['cart'] = [item for item in current_cart if item != product_id]
 
-        # Wrap it in list() to force a brand new memory object!
-        session['cart'] = list(current_cart)
-
-        flash("Produs eliminat din coș!", "success")
-
+    # 3. Notify and Redirect
+    flash("Produs eliminat din coș!", "success")
     return redirect(url_for('public.view_cart'))
 
 
@@ -201,10 +204,17 @@ def login():
         conn = get_db_connection()
         user = conn.execute("SELECT * FROM users WHERE email = ?",(email,)).fetchone()
         conn.close()
-        if user and check_password_hash(user['password'], password) is True:
-            session['admin_logged_in'] = True
-            flash("Admin Logged in!", "success")
-            return redirect(url_for('public.home'))
+        if user and check_password_hash(user['password'], password):
+            # Check the user's role from the database row
+            if user['role'] == 'admin':
+                session['admin_logged_in'] = True
+                flash("Bine ai revenit, Admin!", "success")
+                return redirect(url_for('admin.admin'))  # Send admins to the dashboard
+            else:
+                # Give them a regular customer wristband instead!
+                session['user_logged_in'] = True
+                flash("Te-ai autentificat cu succes!", "success")
+                return redirect(url_for('public.home'))  # Send customers to the homepage
         else:
             flash("Email sau parola incorect", "error")
             return redirect(url_for('public.login'))
@@ -215,5 +225,54 @@ def login():
 @public_bp.route('/logout')
 def logout():
     session.pop('admin_logged_in', None)
+    session.pop('user_logged_in', None)
     flash("Te-ai delogat cu succes!", "success")
     return redirect(url_for('public.home'))
+
+
+@public_bp.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        name = request.form.get('name')
+        phone = request.form.get('phone')
+        address = request.form.get('address')
+
+        # PATCH 1: Form Validation (No empty fields allowed!)
+        if not email or not password or not name:
+            flash("Te rugăm să completezi toate datele obligatorii!", "error")
+            return redirect(url_for('public.register'))
+
+        conn = get_db_connection()
+
+        # THE BOUNCER: Check if the email already exists
+        account = conn.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+
+        # PATCH 2: Proper indentation for the if/else block
+        if account:
+            # The email was found! Kick them back.
+            flash("Email deja folosit!", "error")
+            conn.close()
+            return redirect(url_for('public.register'))
+        else:
+            # THE VAULT: Scramble the password
+            hashed_password = generate_password_hash(password)
+
+            # PATCH 3: The Insertion now includes 'address' and the 5th variable!
+            conn.execute('''
+                         INSERT INTO users (name, email, password, phone, address)
+                         VALUES (?, ?, ?, ?, ?)
+                         ''', (name, email, hashed_password, phone, address))
+
+            # Save and close
+            conn.commit()
+            conn.close()
+
+            flash("Cont creat cu succes! Te rugăm să te autentifici.", "success")
+            return redirect(url_for('public.login'))
+
+    # If it's just a GET request, render the form
+    return render_template('register.html')
+
+

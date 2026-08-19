@@ -41,4 +41,39 @@
         <button type="submit">Adaugă Produs</button>
     </form>
 
+<hr>
+<h2>Comenzi Primite</h2><table style="width: 100%; border-collapse: collapse; margin-top: 20px; background-color: white; box-shadow: 0 4px 8px rgba(0,0,0,0.05);">
+    <thead>
+        <tr style="background-color: #fbc02d; color: #3e2723; text-align: left;">
+            <th style="padding: 12px; border: 1px solid #ddd;">ID</th>
+            <th style="padding: 12px; border: 1px solid #ddd;">Client</th>
+            <th style="padding: 12px; border: 1px solid #ddd;">Telefon</th>
+            <th style="padding: 12px; border: 1px solid #ddd;">Livrare & Adresă</th>
+            <th style="padding: 12px; border: 1px solid #ddd;">Rezumat Comandă</th>
+            <th style="padding: 12px; border: 1px solid #ddd;">Total (RON)</th>
+            <th style="padding: 12px; border: 1px solid #ddd;">Data</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td style="padding: 12px; border: 1px solid #ddd;">#000{{ order.id }}</td>
+            <td style="padding: 12px; border: 1px solid #ddd;"><strong>{{ order.customer_name }}</strong></td>
+            <td style="padding: 12px; border: 1px solid #ddd;">{{ order.phone }}</td>
+            <td style="padding: 12px; border: 1px solid #ddd;">
+                <em>{{ order.delivery_method }}</em><br>
+                {{ order.address }}
+            </td>
+            <td style="padding: 12px; border: 1px solid #ddd; white-space: pre-wrap;">{{ order.order_summary }}</td>
+            <td style="padding: 12px; border: 1px solid #ddd; color: #d32f2f; font-weight: bold;">{{ order.total_price }}</td>
+            <td style="padding: 12px; border: 1px solid #ddd;">{{ order.created_at }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="7" style="padding: 20px; text-align: center; border: 1px solid #ddd;">Nu există comenzi momentan.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
 {% endblock %}
