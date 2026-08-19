@@ -37,8 +37,9 @@ def admin():
         return redirect(url_for('admin.admin'))
 
     all_products = conn.execute('SELECT * FROM products').fetchall()
+    all_orders = conn.execute('SELECT * FROM orders').fetchall()
     conn.close()
-    return render_template('admin.html', products=all_products)
+    return render_template('admin.html', products=all_products,orders=all_orders)
 
 
 @admin_bp.route('/admin/delete/<int:product_id>', methods=['POST'])
