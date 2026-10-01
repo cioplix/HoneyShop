@@ -5,29 +5,37 @@
     <title>Magazinul de Miere</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-<nav style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background-color: #fbc02d;">
-    <div>
-        <a href="/" style="margin-right: 15px; text-decoration: none; color: #3e2723; font-weight: bold;">Acasă</a>
-        <a href="/honey" style="margin-right: 15px; text-decoration: none; color: #3e2723; font-weight: bold;">Miere</a>
-        <a href="/wax" style="margin-right: 15px; text-decoration: none; color: #3e2723; font-weight: bold;">Figurine</a>
-        <a href="/contact" style="margin-right: 15px; text-decoration: none; color: #3e2723; font-weight: bold;">Contact</a>
+<body style="margin: 0; font-family: Arial, sans-serif;">
 
-       <!-- JINJA LOGIC: Dynamic User Buttons -->
-        {% if session.get('admin_logged_in') %}
-            <a href="/admin" style="margin-left: 20px; text-decoration: none; color: white; background-color: #d32f2f; padding: 5px 10px; border-radius: 4px; font-weight: bold;">Admin Dashboard</a>
-            <a href="/logout" style="margin-left: 10px; text-decoration: none; color: #d32f2f; font-weight: bold;">Logout</a>
-        {% elif session.get('user_logged_in') %}
-            <a href="/logout" style="margin-left: 20px; text-decoration: none; color: #d32f2f; font-weight: bold;">Logout</a>
-        {% else %}
-            <a href="/login" style="margin-left: 20px; text-decoration: none; color: #2196F3; font-weight: bold;">Login</a>
-            <a href="/register" style="margin-left: 10px; text-decoration: none; color: #4CAF50; font-weight: bold;">Register</a>
-        {% endif %}
+<nav style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background-color: #fbc02d; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+
+    <div style="display: flex; gap: 15px; align-items: center;">
+        <a href="/" style="text-decoration: none; color: #3e2723; font-weight: bold;">Acasă</a>
+        <a href="/honey" style="text-decoration: none; color: #3e2723; font-weight: bold;">Miere</a>
+        <a href="/wax" style="text-decoration: none; color: #3e2723; font-weight: bold;">Figurine</a>
+        <a href="/contact" style="text-decoration: none; color: #3e2723; font-weight: bold;">Contact</a>
     </div>
 
-    <div>
+    <div style="display: flex; align-items: center; gap: 15px;">
+
+        {% if session.get('admin_logged_in') %}
+            <a href="/admin" style="text-decoration: none; color: white; background-color: #d32f2f; padding: 5px 10px; border-radius: 4px; font-weight: bold;">Admin Dashboard</a>
+            <a href="/logout" style="text-decoration: none; color: #d32f2f; font-weight: bold;">Logout</a>
+
+        {% elif session.get('user_logged_in') %}
+            <a href="/account" style="text-decoration: none; color: #3e2723; font-weight: bold;">Contul Meu</a>
+            <a href="/logout" style="text-decoration: none; color: #ff5252; font-weight: bold; font-size: 14px;">Logout</a>
+
+        {% else %}
+            <a href="/login" style="text-decoration: none; color: #2196F3; font-weight: bold;">Login</a>
+            <a href="/register" style="text-decoration: none; color: #4CAF50; font-weight: bold;">Register</a>
+        {% endif %}
+
+        <span style="color: #3e2723; opacity: 0.3;">|</span>
+
         <a href="/cart" class="cart-btn">Coș</a>
     </div>
+
 </nav>
 
 {% with messages = get_flashed_messages(with_categories=true) %}
@@ -41,9 +49,9 @@
 {% endwith %}
 
 <div class="content-container">
-{% block content %}
-{% endblock %}
-    </div>
+    {% block content %}
+    {% endblock %}
+</div>
 
 <script>
     const flashMessages = document.querySelectorAll('.flash-message');

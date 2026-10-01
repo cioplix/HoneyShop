@@ -84,3 +84,22 @@ def edit_product(product_id):
 
     return render_template('edit.html', product=product_to_edit)
 
+
+@admin_bp.route('/admin/review/<int:review_id>/delete', methods=['POST'])
+def delete_review(review_id):
+    # 1. Your Standard Admin Bouncer
+    admin_login = session.get('admin_logged_in')
+    if not admin_login:
+        flash("Acces interzis!", "error")
+        return redirect(url_for('public.login'))
+
+    # 2. The Executioner
+    conn = get_db_connection()
+    conn.execute("DELETE FROM reviews WHERE id = ?", (review_id,))
+    conn.commit()
+    conn.close()
+
+    flash("Recenzia a fost ștearsă cu succes.", "success")
+
+    # 3. Bounce them right back to the product page they were looking at
+    return redirect(request.referrer or url_for('admin.admin'))

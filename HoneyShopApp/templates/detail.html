@@ -1,9 +1,73 @@
 {% extends 'base.html' %}
+
 {% block content %}
-<h1>{{product.name}}</h1>
-<img src="{{url_for('static', filename='images/' + product.image)}}" alt="{{product.name}}" width="400">
-<h2>Pret: {{product.price}} RON</h2>
-<p>Detalii:{{ product.description}}</p>
+<h1>{{ product.name }}</h1>
+<img src="{{ url_for('static', filename='images/' + product.image) }}" alt="{{ product.name }}" width="400">
+<h2>Pret: {{ product.price }} RON</h2>
+<p>Detalii: {{ product.description }}</p>
 <br>
-<a href="/{{ category }}">Inapoi la Catalog</a>
+<a href="/{{ category }}" style="text-decoration: none; color: #2196F3; font-weight: bold;">&larr; Inapoi la Catalog</a>
+
+<!-- SEPARATOR -->
+<hr style="border: 1px solid #ddd; margin: 40px 0 20px 0;">
+<h3 style="color: #3e2723;">Recenzii Produse</h3>
+
+<!-- 1. THE DISPLAY LOOP -->
+{% if reviews %}
+    <div style="display: flex; flex-direction: column; gap: 15px;">
+    {% for review in reviews %}
+        <div style="background-color: #f9f9f9; padding: 15px; border-left: 4px solid #fbc02d; border-radius: 4px;">
+
+            <!-- HEADER WITH ADMIN BAN HAMMER -->
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <strong style="color: #333;">{{ review.name }}</strong>
+                    <span style="color: #fbc02d; font-weight: bold; margin-left: 10px;">{{ review.rating }} / 5 Stele</span>
+                </div>
+
+                {% if session.get('admin_logged_in') %}
+                    <form action="/admin/review/{{ review.id }}/delete" method="POST" style="margin: 0;">
+                        <button type="submit" style="background-color: #ff5252; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold;" onclick="return confirm('Ești sigur că vrei să ștergi această recenzie?');">
+                            Șterge
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+            <!-- END HEADER -->
+
+            <p style="margin: 10px 0 0 0; color: #555; line-height: 1.5;">{{ review.comment }}</p>
+            <small style="color: #999; display: block; margin-top: 10px;">Adăugat pe: {{ review.created_at }}</small>
+        </div>
+    {% endfor %}
+    </div>
+{% else %}
+    <p style="color: #777; font-style: italic;">Nu există recenzii încă. Fii primul care lasă una!</p>
+{% endif %}
+
+<!-- 2. THE SUBMISSION FORM (Bouncer Protected) -->
+{% if session.get('user_logged_in') %}
+    <div style="margin-top: 30px; padding: 20px; background-color: #fff3e0; border-radius: 8px; border: 1px solid #ffe0b2;">
+        <h4 style="margin-top: 0; color: #e65100;">Lasă o Recenzie</h4>
+        <form action="/product/{{ product.id }}/review" method="POST" style="display: flex; flex-direction: column; gap: 15px;">
+
+            <div>
+                <label style="font-weight: bold; color: #333;">Rating (1-5):</label>
+                <input type="number" name="rating" min="1" max="5" required style="padding: 8px; width: 80px; margin-left: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+                <label style="font-weight: bold; color: #333;">Comentariu:</label>
+                <textarea name="comment" rows="3" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; resize: vertical;"></textarea>
+            </div>
+
+            <button type="submit" style="background-color: #fbc02d; color: #3e2723; padding: 10px 20px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; align-self: flex-start;">
+                Trimite Recenzia
+            </button>
+        </form>
+    </div>
+{% else %}
+    <p style="margin-top: 30px; padding: 15px; background-color: #ffebee; border-radius: 4px; color: #c62828;">
+        <em>Trebuie să fii <a href="/login" style="color: #d32f2f; font-weight: bold;">autentificat</a> pentru a lăsa o recenzie.</em>
+    </p>
+{% endif %}
 {% endblock %}

@@ -28,7 +28,7 @@ cursor.execute(
 )
 
 # ---------------------------------------------------------
-# 3. Create the NEW Orders Table right here!
+# 3. Create the NEW Orders Table
 # ---------------------------------------------------------
 cursor.execute('''
     CREATE TABLE IF NOT EXISTS orders (
@@ -39,7 +39,8 @@ cursor.execute('''
         address TEXT NOT NULL,
         order_summary TEXT NOT NULL,
         total_price REAL NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        user_id INTEGER 
     )
 ''')
 
@@ -65,6 +66,21 @@ cursor.execute(
     "INSERT INTO users (name, email, password, phone, address,role) VALUES (?, ?, ?, ?, ?,?)",
     ('ADMIN', 'admin@admin.com', admin_password, '0700000000', 'ADMINHousehold','admin')
 )
+
+#5. Review Database
+
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS reviews (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        product_id INTEGER NOT NULL,
+        user_id INTEGER NOT NULL,
+        rating INTEGER NOT NULL,
+        comment TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (product_id) REFERENCES products (id),
+        FOREIGN KEY (user_id) REFERENCES users (id)
+    )
+''')
 
 connection.commit()
 connection.close()
