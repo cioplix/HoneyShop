@@ -4,21 +4,21 @@
     <h2 style="text-align: center; color: #333;">Creare Cont</h2>
     <hr style="border: 1px solid #ddd; margin-bottom: 20px;">
     
-    <form action="/register" method="POST" style="display: flex; flex-direction: column; gap: 15px;">
+ <form action="/register" method="POST" autocomplete="off" style="display: flex; flex-direction: column; gap: 15px;">
         <label style="font-weight: bold;">Nume Complet:</label>
-        <input type="text" name="name" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
-        
+        <input type="text" name="name" required autocomplete="off" style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+
         <label style="font-weight: bold;">Email:</label>
-        <input type="email" name="email" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
-        
+        <input type="email" name="email" required autocomplete="off" style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+
         <label style="font-weight: bold;">Parolă:</label>
-        <input type="password" name="password" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
-        
+        <input type="password" name="password" required autocomplete="new-password" style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+
         <label style="font-weight: bold;">Telefon:</label>
-        <input type="tel" name="phone" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
-        
+        <input type="tel" name="phone" required autocomplete="off" style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+
         <label style="font-weight: bold;">Adresă Livrare:</label>
-        <textarea name="address" rows="3" required style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
+        <textarea name="address" rows="3" required autocomplete="off" style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
         
         <button type="submit" style="background-color: #4CAF50; color: white; padding: 12px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px;">
             Înregistrare

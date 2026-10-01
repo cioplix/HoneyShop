@@ -6,17 +6,28 @@
 
 <ul>
     {% for item in honey_products %}
-    <li>
+    <li style="margin-bottom: 30px;">
          <img src="{{url_for('static', filename='images/'+item.image)}}" alt="{{item.name}}" width="200">
        <h2>
     <a href="/honey/{{ item.name }}">{{ item.name }}</a> - {{ item.price }} RON
        </h2>
+
+
+    <div style="margin: 10px 0;">
+    {% if item.avg_rating %}
+        <span style="color: #fbc02d; font-weight: bold;">⭐ {{ item.avg_rating|round(1) }} / 5</span>
+        <span style="color: #777; font-size: 14px;">({{ item.review_count }} recenzii)</span>
+    {% else %}
+        <span style="color: #999; font-style: italic;">Fără recenzii încă</span>
+    {% endif %}
+    </div>
+
      <form action="/add_to_cart/{{ item.id }}" method="POST" style="margin-top: 10px; display: flex; align-items: center; gap: 10px;">
-    <input type="number" name="quantity" min="1" value="1" style="width: 50px; padding: 7px; border: 1px solid #ccc; border-radius: 4px;">
-    <button type="submit" style="background-color: #fbc02d; color: black; border: none; padding: 8px 15px; border-radius: 4px; font-weight: bold; cursor: pointer;">
-        Adaugă în Coș
-    </button>
-</form>
+        <input type="number" name="quantity" min="1" value="1" style="width: 50px; padding: 7px; border: 1px solid #ccc; border-radius: 4px;">
+        <button type="submit" style="background-color: #fbc02d; color: black; border: none; padding: 8px 15px; border-radius: 4px; font-weight: bold; cursor: pointer;">
+            Adaugă în Coș
+        </button>
+    </form>
         <p>Detalii: {{item.description}} </p>
     </li>
     {% endfor %}
